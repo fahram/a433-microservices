@@ -6,6 +6,8 @@ services:
   item-app:
     # Menggunakan image item-app dari Docker Hub
     image: fahram/item-app:v1
+    # Menerapkan restart policy pada berkas docker-compose.yml agar container selalu restart ketika terhenti
+    restart: always
     # Melakukan port mapping agar dapat diakses dari port 80 di host
     ports:
       - "80:8080"
