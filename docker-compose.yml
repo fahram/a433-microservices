@@ -19,6 +19,8 @@ services:
   item-db:
     # Menggunakan image mongo:3 dari Docker Hub
     image: mongo:3
+    # Menerapkan restart policy pada berkas docker-compose.yml agar container selalu restart ketika terhenti
+    restart: always
     # Memakai volume bernama app-db dengan target /data/db di container
     volumes:
       - app-db:/data/db
