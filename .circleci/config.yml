@@ -1,0 +1,33 @@
+version: 2.1
+
+orbs:
+  docker: circleci/docker@2.2.0
+jobs:
+  # build docker file dan push ke ghcr
+  build-app-karsajobs-ui:
+    executor: docker/docker
+    environment:
+      IMAGE_NAME: ghcr.io/fahram/karsajobs-ui
+    # steps dari setiap jobs, tidak dikomen karena sudah ada di name
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Build Docker Image
+          command: docker build -t $IMAGE_NAME:latest .
+      - run:
+          name: Login to ghcr.io
+          command: echo $PASSWORD_GITHUB | docker login ghcr.io -u $USER_GITHUB --password-stdin
+      - run:
+          name: Publish Image to ghcr.io
+          command: docker push $IMAGE_NAME:latest
+
+workflows:
+  ci:
+    jobs:
+      - docker/hadolint:
+          dockerfiles: './Dockerfile'
+      - build-app-karsajobs-ui:
+          requires: 
+            - docker/hadolint
+    
