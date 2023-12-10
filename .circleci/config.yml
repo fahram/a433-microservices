@@ -7,7 +7,7 @@ jobs:
   # proses jobs untuk test-app backend
   test-app:
     executor:
-      name : go/default 
+      name: go/default 
       tag: '1.15'
     steps:
       - checkout
@@ -16,10 +16,9 @@ jobs:
           command: go test -v -short --count=1 $(go list ./...)
   # build docker file dan push ke ghcr
   build-app-karsajobs:
-    executor:
-      name: docker/docker
-      environment:
-        IMAGE_NAME: ghcr.io/fahram/karsajobs:latest
+    executor: docker/docker
+    environment:
+      IMAGE_NAME: ghcr.io/fahram/karsajobs
     # steps dari setiap jobs, tidak dikomen karena sudah ada di name
     steps:
       - checkout
@@ -29,7 +28,7 @@ jobs:
           command: docker build -t $IMAGE_NAME:latest .
       - run:
           name: Login to ghcr.io
-          command: echo $PASSWORD_GITHUB | docker login ghcr.io -u fahram --password-stdin
+          command: echo $PASSWORD_GITHUB | docker login ghcr.io -u $USER_GITHUB --password-stdin
       - run:
           name: Publish Image to ghcr.io
           command: docker push $IMAGE_NAME:latest
