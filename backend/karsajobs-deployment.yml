@@ -1,38 +1,65 @@
+# Versi Api yang didefinisikan
 apiVersion: apps/v1
+# jenis Object Kubernetes (deployment)
 kind: Deployment
+# Metadata untuk deployment
 metadata:
+  #  Nama Deployment
   name: karsajobs-backend
+# Spesifikasi untuk deployment
 spec:
+  # Jumlah replika pod yang akan dibuat
   replicas: 1
+  # selector untuk memilih pod
   selector:
+    # Pod yang dipilih harus memiliki label sesuai ketentuan
     matchLabels:
       app: backend
+  # Template untuk membuat pod
   template:
+    # Metadata untuk pod
     metadata:
+      # Label pod
       labels:
         app: backend
+    # Spesifikasi untuk pod
     spec:
+      # Konfigurasi container dalam pod
       containers:
+      # Nama Kontainer
       - name: karsajobs
+        # Image yang digunakan untuk membuat container
         image: ghcr.io/fahram/karsajobs:latest
+        # Mekanisme pull image (image dipull setiap kali pod dimulai)
         imagePullPolicy: Always
+        # Sumber Daya yang dibutuhkan oleh penampung ini
         resources:
+          # jumlah maksimum sumber daya komputasi yang diperbolehkan
           limits:
+            # Ukuran CPU yang akan digunakan. "250m" berarti hanya menggunakan 1/4 dari ukuran CPU
             cpu: "250m"
+            # Memori/RAM yang akan digunakan. "256Mi" berarti 256 Megabyte
             memory: "256Mi"
+        # Port yang digunakan
         ports:
+        # port yang digunakan untuk mengakses container
         - containerPort: 8080
+        # Environment variable yang dibutuhkan oleh aplikasi
         env:
+          # Nama (name) environtment variable
         - name: APP_PORT
+          # Nilai (value) environtment variable
           value: '8080'
         - name: MONGO_HOST
           value: mongo-service
         - name: MONGO_USER
+          # Value dari environment variable berasal dari secret (mongo-crendential) dengan key MONGO_ROOT_USERNAME
           valueFrom:
             secretKeyRef:
               name: mongo-credentials
               key: MONGO_ROOT_USERNAME
         - name: MONGO_PASS
+          # Value dari environment variable berasal dari secret (mongo-crendential) dengan key MONGO_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
               name: mongo-credentials

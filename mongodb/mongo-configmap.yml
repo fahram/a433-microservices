@@ -1,8 +1,12 @@
+# Versi Api yang didefinisikan
 apiVersion: v1
+# jenis Object Kubernetes (ConfigMap)
 kind: ConfigMap
+# Metadata untuk ConfigMap
 metadata:
+  #  Nama ConfigMap
   name: mongo-config
-
+# Data sebagai file mongo.conf yang memiliki properti storage dengan key dbPath dan nilai /data/db
 data:
   mongo.conf: |
     storage:

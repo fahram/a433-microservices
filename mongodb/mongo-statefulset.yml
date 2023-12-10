@@ -1,53 +1,88 @@
+# Versi Api yang didefinisikan
 apiVersion: apps/v1
+# jenis Object Kubernetes (StatefulSet)
 kind: StatefulSet
+# Metadata untuk StatefulSet
 metadata:
+  # Nama StatefulSet
   name: mongodb
-spec:
+# Spesifikasi untuk StatefulSet
+spec:  
+# Selector untuk memilih pod yang akan dilayani oleh StatefulSet
   selector:
+    # Pod yang dipilih harus memiliki label sesuai ketentuan (app : database, selector: mongodb)
     matchLabels:
       app: database
       selector: mongodb
+  # nama service yang mengatur StatefulSet ini
   serviceName: mongo-service
+  # Jumlah minimum waktu (detik) yang diperlukan agar pod yang baru dibuat harus siap tanpa ada container yang crash agar dianggap tersedia.
   minReadySeconds: 10
 
+  # Jumlah replika pod yang akan dibuat
   replicas: 1
+  # Template untuk membuat pod
   template:
+    # Metadata untuk pod
     metadata: 
+      # Label pod
       labels:
         app: database
         selector: mongodb
+    # Spesifikasi untuk pod
     spec:
+      # Konfigurasi container dalam pod
       containers:
+      # Nama Kontainer
       - name: mongodb
+        # Image yang digunakan untuk membuat kontainer
         image: mongo:4.4.3
+        # Port yang digunakan kontainer
         ports:
+        # port yang digunakan untuk mengakses container
         - containerPort: 27017
           name: mongodb
+        # Environment variable yang dibutuhkan oleh aplikasi
         env:
+          # Nama (name) environtment variable
         - name: MONGO_INITDB_ROOT_USERNAME_FILE
+          # Nilai (value) environtment variable
           value: /etc/mongo-credentials/MONGO_ROOT_USERNAME
         - name: MONGO_INITDB_ROOT_PASSWORD_FILE
           value: /etc/mongo-credentials/MONGO_ROOT_PASSWORD
+        # volume mount yang dieksekusi oleh aplikasi
         volumeMounts:
+        # volume mount dan path di dalam kontainer yang akan digunakan untuk PersistentVolume
         - name: mongo-data
           mountPath: /data/db
+        # volume mount dan path di dalam kontainer yang akan digunakan untuk ConfigMap
         - name: mongo-config
           mountPath: /config
+        # volume mount dan path di dalam kontainer yang akan digunakan untuk Secret
         - name: mongo-credentials
           mountPath: /etc/mongo-credentials
+      # volume mount yand didefinisikan pada aplikais
       volumes:
+      # Nama persistentVolume yang akan digunakan pada aplikasi
       - name: mongo-data
+      # Nama persistentVolumeClaim yang akan digunakan pada aplikasi
         persistentVolumeClaim:
           claimName: mongo-pvc
+      # Nama Configmap yang akan digunakan pada aplikasi
       - name: mongo-config
         configMap:
+          # Nama Configmap yang akan digunakan pada aplikasi
           name: mongo-config
+          # key dan path pada configmap yang akan digunakan
           items:
           - key: mongo.conf
             path: mongo.conf
+      # Nama secret yang akan digunakan
       - name: mongo-credentials
         secret:
+          # Nama secret yang akan digunakan
           secretName: mongo-credentials
+          # key dan path pada secret yang akan digunakan
           items:
             - key: MONGO_ROOT_USERNAME
               path: MONGO_ROOT_USERNAME
