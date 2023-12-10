@@ -5,7 +5,7 @@ kind: Service
 # Metadata untuk service
 metadata:
   #  Nama service
-  name: mongo-
+  name: mongo-service
   # label service
   labels:
     app : database
