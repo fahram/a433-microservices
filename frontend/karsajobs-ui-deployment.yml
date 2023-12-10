@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: karsajobs-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - name: karsajobs-ui
+        image: ghcr.io/fahram/karsajobs-ui:latest
+        imagePullPolicy: Always
+        resources:
+          limits:
+            cpu: "750m"
+            memory: "1Gi"
+        ports:
+        - containerPort: 8000
+        env:
+        - name: VUE_APP_BACKEND
+          value: 'http://192.168.49.2:30627'
