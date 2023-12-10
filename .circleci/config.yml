@@ -1,5 +1,6 @@
+# Versi yang didefinisikan
 version: 2.1
-
+# paket konfigurasi CircleCI
 orbs:
   docker: circleci/docker@2.2.0
   go: circleci/go@1.7.3
@@ -9,6 +10,7 @@ jobs:
     executor:
       name: go/default 
       tag: '1.15'
+    # steps dari setiap jobs, tidak dikomen karena sudah ada di name
     steps:
       - checkout
       - run:
@@ -32,13 +34,17 @@ jobs:
       - run:
           name: Publish Image to ghcr.io
           command: docker push $IMAGE_NAME:latest
-
+# Mendefinisikan workflows atau alur kerja yang berisi urutan pekerjaan yang akan dijalankan
 workflows:
+  # workflows ini terdiri dari tiga job
   ci:
     jobs:
+      # Memeriksa Dockerfile menggunakan linter
       - docker/hadolint:
           dockerfiles: './Dockerfile'
+      # Menjalankan job test-app
       - test-app
+      # Menjalankan job build-app-karsajobs
       - build-app-karsajobs:
           requires: 
             - docker/hadolint
