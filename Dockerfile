@@ -23,4 +23,4 @@ ENV PORT=3001
 ENV AMQP_URL="amqp://guest:guest@localhost:5672"
 
 # CMD digunakan untuk menentukan perintah default yang akan dijalankan ketika container dijalankan
-CMD ["node", "inkdex.js"]
+CMD ["node", "index.js"]
