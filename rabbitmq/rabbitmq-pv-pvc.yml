@@ -6,21 +6,13 @@ metadata:
     type: local
   namespace: e-commerce
 spec:
-  storageClassName: rabbitmq-storageclass
   capacity:
     storage: 10Gi
   accessModes:
     - ReadWriteMany
   hostPath:
     path: "/var/lib/rabbitmq/mnesia"
-  nodeAffinity:
-    required:
-      nodeSelectorTerms:
-      - matchExpressions:
-        - key: size
-          operator: In
-          values:
-            - large
+
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -28,8 +20,6 @@ metadata:
   name: rabbitmq-pvc
   namespace: e-commerce
 spec:
-  storageClassName: rabbitmq-storageclass
-  volumeMode: Filesystem
   accessModes:
     - ReadWriteMany
   resources:

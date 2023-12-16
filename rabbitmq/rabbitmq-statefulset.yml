@@ -6,7 +6,7 @@ metadata:
   labels:
     app: rabbitmq
 spec:
-  serviceName: rabbitmq-service
+  serviceName: rabbitmq
   replicas: 1
   selector:
     matchLabels:
@@ -18,18 +18,7 @@ spec:
     spec:
       containers:
         - name: rabbitmq
-          image: rabbitmq:3.11-management
-          env:
-          - name: RABBITMQ_DEFAULT_USER
-            valueFrom:
-              secretKeyRef:
-                name: rabbitmq-secret
-                key: RABBITMQ_DEFAULT_USERNAME
-          - name: RABBITMQ_DEFAULT_PASS
-            valueFrom:
-              secretKeyRef:
-                name: rabbitmq-secret
-                key: RABBITMQ_DEFAULT_PASSWORD
+          image: rabbitmq:3.8-management
           ports:
             - name: amqp
               containerPort: 5672
@@ -37,23 +26,14 @@ spec:
             - name: http
               containerPort: 15672
               protocol: TCP
-            - name: prometheus
-              containerPort: 15692
-              protocol: TCP
           volumeMounts:
-            - name: rabbitmq-config
-              mountPath: /etc/rabbitmq
             - name: rabbitmq-data
-              mountPath: /var/lib/rabbitmq/mnesia
-      nodeSelector:
-        size: large
-      volumes:
-      - name: rabbitmq-config
-        configMap:
-          name: rabbitmq-configmap
-          items:
-          - key: rabbitmq.conf
-            path: rabbitmq.conf
-      - name: rabbitmq-data
-        persistentVolumeClaim:
-          claimName: rabbitmq-pvc
+              mountPath: /var/lib/rabbitmq
+  volumeClaimTemplates:
+    - metadata:
+        name: rabbitmq-data
+      spec:
+        accessModes: ["ReadWriteMany"]
+        resources:
+          requests:
+            storage: 5Gi 

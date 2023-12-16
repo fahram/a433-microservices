@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: rabbitmq-service
+  name: rabbitmq
   namespace: e-commerce
 spec:
   selector:
@@ -18,8 +18,3 @@ spec:
       protocol: TCP
       targetPort: 15672
       nodePort: 30105
-    - name: prometheus
-      port: 15692
-      protocol: TCP
-      targetPort: 15692
-      nodePort: 30106
