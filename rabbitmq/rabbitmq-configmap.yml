@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rabbitmq-configmap
+  namespace: e-commerce
+data:
+  definitions.json: |-
+    storage:
+      dbPath: /data/rabbitjson
+  enabled_plugins: '[rabbitmq_peer_discovery_k8s, rabbitmq_prometheus].'
+  rabbitmq.conf: |-
+    storage:
+      dbPath: /data/config
