@@ -1,7 +1,7 @@
  apiVersion: networking.istio.io/v1alpha3 
  kind: Gateway 
  metadata:
-   name: order-gateway  
+   name: e-commerce-gateway  
    namespace: e-commerce
  spec:
    selector:
