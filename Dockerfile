@@ -1,5 +1,5 @@
-# Menggunakan base image dari Node.js versi 14
-FROM node:14
+# Menggunakan base image dari Node.js versi 18 dengan alpine linux
+FROM node:18-alpine as base
 
 # Menetapkan direktori kerja di dalam container sebagai /app
 WORKDIR /app
@@ -7,8 +7,14 @@ WORKDIR /app
 # Menyalin package.json dan package-lock.json ke dalam container
 COPY package*.json ./
 
-# Menjalankan perintah npm install untuk menginstall dependencies
-RUN npm install
+# Membuat langkah tambahan dengan alias "production" berdasarkan tahap "base".
+FROM base as production
+
+# Mengatur variabel lingkungan NODE_ENV ke "production".
+ENV NODE_ENV=production
+
+# Menjalankan perintah npm ci untuk menginstall dependencies
+RUN npm ci
 
 # Menyalin seluruh konten dari direktori host ke dalam container
 COPY . .
