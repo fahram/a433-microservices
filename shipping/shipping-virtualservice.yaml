@@ -1,19 +1,33 @@
- apiVersion: networking.istio.io/v1alpha3  
- kind: VirtualService  
- metadata:
-   name: shipping-service  
-   namespace: e-commerce
- spec:
-   hosts:
-     - "*"  
-   gateways:
-     - e-commerce-gateway  
-   http:
-     - match:
-         - uri:
-             exact: "/shipping"  
-       route:
-         - destination:
-             host: shipping-service  
-             port:
-               number: 3001  
+# Menggunakan versi API dan jenis objek Istio VirtualService
+apiVersion: networking.istio.io/v1alpha3  
+kind: VirtualService  
+
+# Metadata untuk virtual service, memberikan nama dan namespace
+metadata:
+  name: shipping-service  
+  namespace: e-commerce
+
+# Spesifikasi konfigurasi virtual service
+spec:
+  # Hosts yang akan ditangani oleh virtual service, dalam hal ini, semua host ("*")
+  hosts:
+    - "*"  
+
+  # Gateways yang akan terhubung ke virtual service
+  gateways:
+    - e-commerce-gateway  
+
+  # Konfigurasi aturan HTTP
+  http:
+    - match:
+        # Aturan pencocokan URI, dalam hal ini, hanya URI "/shipping"
+        - uri:
+            exact: "/shipping"  
+      # Rute untuk mengarahkan lalu lintas
+      route:
+        - destination:
+            # Host tujuan yang akan menerima lalu lintas
+            host: shipping-service  
+            # Port tujuan di host yang akan menerima lalu lintas
+            port:
+              number: 3001  

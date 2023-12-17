@@ -1,24 +1,41 @@
+# Menentukan versi API dan jenis objek Kubernetes
 apiVersion: apps/v1
 kind: StatefulSet
+
+# Metadata untuk StatefulSet, memberikan nama, namespace, dan label
 metadata:
   name: rabbitmq
   namespace: e-commerce
   labels:
     app: rabbitmq
+
+# Spesifikasi konfigurasi StatefulSet
 spec:
-  serviceName: rabbitmq
+  # Nama layanan yang terkait dengan StatefulSet
+  serviceName: rabbitmq-service
+
+  # Jumlah replika yang akan dijalankan
   replicas: 1
+
+  # Selektor untuk menentukan pod mana yang dikelola oleh StatefulSet
   selector:
     matchLabels:
       app: rabbitmq
+
+  # Template untuk konfigurasi pod yang akan dibuat oleh StatefulSet
   template:
     metadata:
+      # Label untuk pod
       labels:
         app: rabbitmq
     spec:
+      # Kontainer yang akan dijalankan dalam pod
       containers:
         - name: rabbitmq
+          # Gambar Docker yang akan digunakan
           image: rabbitmq:3.11-management
+
+          # Port yang akan terbuka di dalam kontainer
           ports:
             - name: amqp
               containerPort: 5672
@@ -26,14 +43,24 @@ spec:
             - name: http
               containerPort: 15672
               protocol: TCP
+            - name: prometheus
+              containerPort: 15692
+              protocol: TCP
+
+          # Mounting volume ke dalam kontainer
           volumeMounts:
             - name: rabbitmq-data
               mountPath: /var/lib/rabbitmq
+
+  # Template klaim volume persisten untuk StatefulSet
   volumeClaimTemplates:
     - metadata:
         name: rabbitmq-data
       spec:
+        # Mode akses ke volume persisten
         accessModes: ["ReadWriteMany"]
+
+        # Sumber daya yang diminta oleh volume persisten
         resources:
           requests:
-            storage: 5Gi 
+            storage: 5Gi

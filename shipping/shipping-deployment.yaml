@@ -1,21 +1,37 @@
+# Menentukan versi API dan jenis objek Kubernetes
 apiVersion: apps/v1
 kind: Deployment 
+
+# Metadata untuk deployment, memberikan nama dan namespace
 metadata: 
   name: shipping-service
   namespace: e-commerce
+
+# Spesifikasi konfigurasi deployment
 spec: 
+  # Jumlah replika yang akan dijalankan
   replicas: 1 
+  
+  # Selektor untuk menentukan pod mana yang akan dimanage oleh deployment
   selector: 
     matchLabels:
       app: shipping-service
+
+  # Template untuk konfigurasi pod yang akan dibuat oleh deployment
   template: 
     metadata:
+      # Label untuk pod
       labels:
         app: shipping-service
-    spec: 
+
+    spec:
+      # Kontainer yang akan dijalankan dalam pod
       containers:
       - name: shipping-service
+        # Gambar Docker yang akan digunakan
         image: ghcr.io/fahram/shipping-service:latest
+        # Kebijakan untuk menarik gambar: selalu menarik versi terbaru
         imagePullPolicy: Always
+        # Port yang akan terbuka di dalam kontainer
         ports:
         - containerPort: 3001 

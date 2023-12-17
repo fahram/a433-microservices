@@ -1,27 +1,45 @@
+# Menentukan versi API dan jenis objek Kubernetes
 apiVersion: v1
 kind: PersistentVolume
+
+# Metadata untuk PersistentVolume, memberikan nama dan label
 metadata:
   name: rabbitmq-pv
   labels:
     type: local
   namespace: e-commerce
+
+# Spesifikasi konfigurasi PersistentVolume
 spec:
+  # Kapasitas penyimpanan yang dialokasikan untuk PersistentVolume
   capacity:
     storage: 10Gi
+
+  # Mode akses ke PersistentVolume
   accessModes:
     - ReadWriteMany
+
+  # Jenis penyimpanan dan path host yang akan digunakan oleh PersistentVolume
   hostPath:
     path: "/var/lib/rabbitmq/mnesia"
 
 ---
+# Menentukan versi API dan jenis objek Kubernetes
 apiVersion: v1
 kind: PersistentVolumeClaim
+
+# Metadata untuk PersistentVolumeClaim, memberikan nama dan namespace
 metadata:
   name: rabbitmq-pvc
   namespace: e-commerce
+
+# Spesifikasi konfigurasi PersistentVolumeClaim
 spec:
+  # Mode akses ke PersistentVolume yang akan diajukan klaim
   accessModes:
     - ReadWriteMany
+
+  # Sumber daya yang diminta oleh PersistentVolumeClaim
   resources:
     requests:
       storage: 10Gi

@@ -1,14 +1,25 @@
+# Menentukan versi API dan jenis objek Kubernetes
 apiVersion: v1
 kind: Service 
+
+# Metadata untuk service, termasuk namespace, label, dan nama
 metadata: 
   namespace: e-commerce
   labels:
     app: shipping-service
   name: shipping-service
+
+# Spesifikasi konfigurasi service
 spec: 
+  # Jenis layanan, dalam hal ini, NodePort
   type: NodePort
+
+  # Konfigurasi port untuk service
   ports:
-  - port: 3001
-    nodePort: 30108
+    - port: 3001
+      # NodePort yang akan digunakan untuk layanan
+      nodePort: 30108
+
+  # Selektor untuk menentukan pod mana yang akan dilayani oleh service
   selector: 
     app: shipping-service

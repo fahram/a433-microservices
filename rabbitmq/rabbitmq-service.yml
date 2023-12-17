@@ -1,20 +1,43 @@
+# Menentukan versi API dan jenis objek Kubernetes
 apiVersion: v1
 kind: Service
+
+# Metadata untuk service, memberikan nama dan namespace
 metadata:
-  name: rabbitmq
+  name: rabbitmq-service
   namespace: e-commerce
+
+# Spesifikasi konfigurasi service
 spec:
+  # Selektor untuk menentukan pod mana yang dilayani oleh service
   selector:
     app: rabbitmq
+
+  # Jenis layanan, dalam hal ini, NodePort
   type: NodePort
+
+  # Konfigurasi port untuk service
   ports:
+    # Port untuk layanan AMQP
     - name: amqp
       port: 5672
       protocol: TCP
       targetPort: 5672
+      # NodePort yang akan digunakan untuk layanan AMQP
       nodePort: 30104
+
+    # Port untuk antarmuka manajemen HTTP RabbitMQ
     - name: http
       port: 15672
       protocol: TCP
       targetPort: 15672
+      # NodePort yang akan digunakan untuk antarmuka manajemen HTTP
       nodePort: 30105
+
+    # Port untuk ekspor metrik Prometheus RabbitMQ
+    - name: prometheus
+      port: 15692
+      protocol: TCP
+      targetPort: 15692
+      # NodePort yang akan digunakan untuk ekspor metrik Prometheus
+      nodePort: 30106
