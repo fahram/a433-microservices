@@ -16,11 +16,5 @@ COPY . .
 # Mengekspos port 3000 agar dapat diakses dari luar container
 EXPOSE 3000
 
-# Menetapkan environment variable PORT dengan nilai 3000
-ENV PORT=3000
-
-# Menetapkan environment variable AMQP_URL dengan nilai "amqp://guest:guest@localhost:5672"
-ENV AMQP_URL="amqp://guest:guest@localhost:5672"
-
 # CMD digunakan untuk menentukan perintah default yang akan dijalankan ketika container dijalankan
 CMD ["node", "index.js"]
